@@ -93,6 +93,7 @@ describe('DevOps Todo Application - Selenium Tests', function () {
     describe('Test 5: Create Multiple Todos', function () {
         it('should create multiple todos and display them', async function () {
             await driver.get(APP_URL);
+            await driver.wait(until.elementLocated(By.id('new-todo-input')), 10000);
 
             const input = await driver.findElement(By.id('new-todo-input'));
             const addButton = await driver.findElement(By.id('add-todo-btn'));
@@ -104,10 +105,11 @@ describe('DevOps Todo Application - Selenium Tests', function () {
             ];
 
             for (const todoText of todos) {
+                await driver.wait(until.elementIsEnabled(input), 5000);
                 await input.clear();
                 await input.sendKeys(todoText);
                 await addButton.click();
-                await driver.sleep(500);
+                await driver.sleep(800);
             }
 
             const todosList = await driver.findElement(By.id('todos-list'));
@@ -202,9 +204,11 @@ describe('DevOps Todo Application - Selenium Tests', function () {
     describe('Test 8: Delete Todo', function () {
         it('should delete a todo', async function () {
             await driver.get(APP_URL);
+            await driver.wait(until.elementLocated(By.id('new-todo-input')), 10000);
 
             // Create a new todo
             const input = await driver.findElement(By.id('new-todo-input'));
+            await driver.wait(until.elementIsEnabled(input), 5000);
             const addButton = await driver.findElement(By.id('add-todo-btn'));
 
             const todoText = `Delete Test ${Date.now()}`;
@@ -306,9 +310,11 @@ describe('DevOps Todo Application - Selenium Tests', function () {
     describe('Test 11: Database Persistence', function () {
         it('should persist todos across page reloads', async function () {
             await driver.get(APP_URL);
+            await driver.wait(until.elementLocated(By.id('new-todo-input')), 10000);
 
             // Create a unique todo
             const input = await driver.findElement(By.id('new-todo-input'));
+            await driver.wait(until.elementIsEnabled(input), 5000);
             const addButton = await driver.findElement(By.id('add-todo-btn'));
 
             const uniqueTodo = `Persistence Test ${Date.now()}`;
@@ -333,8 +339,10 @@ describe('DevOps Todo Application - Selenium Tests', function () {
     describe('Test 12: Keyboard Navigation', function () {
         it('should create todo using Enter key', async function () {
             await driver.get(APP_URL);
+            await driver.wait(until.elementLocated(By.id('new-todo-input')), 10000);
 
             const input = await driver.findElement(By.id('new-todo-input'));
+            await driver.wait(until.elementIsEnabled(input), 5000);
 
             const todoText = `Keyboard Test ${Date.now()}`;
             await input.sendKeys(todoText);
