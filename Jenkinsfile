@@ -103,8 +103,9 @@ pipeline {
                     <p style="color: green;">All Selenium tests passed successfully!</p>
                     
                     <h3>Deployment Status</h3>
-                    <p>Application containers have been stopped as per assignment requirements.</p>
-                    <p>The instructor can now make changes and trigger the pipeline again.</p>
+                    <p style="color: green;">Application is now running and accessible!</p>
+                    <p><strong>Application URL:</strong> http://&lt;EC2-IP&gt;:3000</p>
+                    <p>Containers will remain active until manually stopped.</p>
                     
                     <p><strong>Build URL:</strong> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
                     
@@ -178,10 +179,9 @@ pipeline {
         always {
             echo 'Cleaning up...'
             script {
-                // Stop all containers as per assignment requirement
-                // This runs AFTER emails are sent in success/failure/unstable blocks
-                sh 'docker-compose down || true'
-                echo 'Containers stopped - ready for instructor testing'
+                // Containers will keep running after build
+                echo 'Containers remain active for continuous deployment'
+                echo 'Application accessible at: http://<EC2-IP>:3000'
             }
             echo 'Cleaning up workspace...'
             cleanWs()
