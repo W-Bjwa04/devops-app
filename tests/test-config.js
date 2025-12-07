@@ -43,5 +43,5 @@ module.exports = {
     APP_URL,
     HEADLESS,
     createDriver,
-    getChromeOptions,
+    getFirefoxOptions,
 };
