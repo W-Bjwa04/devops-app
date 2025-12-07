@@ -155,6 +155,30 @@ export default function Home() {
         }
     };
 
+    const deleteAllTodos = async () => {
+        if (!confirm(`Are you sure you want to delete all ${todos.length} todos? This action cannot be undone!`)) {
+            return;
+        }
+
+        try {
+            setError('');
+            const response = await fetch('/api/todos', {
+                method: 'DELETE',
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                setTodos([]);
+            } else {
+                setError(data.error || 'Failed to delete all todos');
+            }
+        } catch (err) {
+            setError('Failed to delete all todos');
+            console.error('Error deleting all todos:', err);
+        }
+    };
+
     const stats = {
         total: todos.length,
         completed: todos.filter(t => t.completed).length,
@@ -171,25 +195,37 @@ export default function Home() {
             <div className="todo-card">
                 {error && <div className="error">{error}</div>}
 
-                <form onSubmit={addTodo} className="add-todo-form">
-                    <input
-                        type="text"
-                        className="todo-input"
-                        placeholder="What needs to be done?"
-                        value={newTodo}
-                        onChange={(e) => setNewTodo(e.target.value)}
-                        disabled={loading}
-                        id="new-todo-input"
-                    />
-                    <button
-                        type="submit"
-                        className="btn btn-primary"
-                        disabled={loading}
-                        id="add-todo-btn"
-                    >
-                        ➕ Add Todo
-                    </button>
-                </form>
+                <div className="top-actions">
+                    <form onSubmit={addTodo} className="add-todo-form">
+                        <input
+                            type="text"
+                            className="todo-input"
+                            placeholder="What needs to be done?"
+                            value={newTodo}
+                            onChange={(e) => setNewTodo(e.target.value)}
+                            disabled={loading}
+                            id="new-todo-input"
+                        />
+                        <button
+                            type="submit"
+                            className="btn btn-primary"
+                            disabled={loading}
+                            id="add-todo-btn"
+                        >
+                            ➕ Add Todo
+                        </button>
+                    </form>
+                    {todos.length > 0 && (
+                        <button
+                            className="btn btn-danger-all"
+                            onClick={deleteAllTodos}
+                            disabled={loading}
+                            id="delete-all-btn"
+                        >
+                            🗑️ Delete All ({todos.length})
+                        </button>
+                    )}
+                </div>
 
                 {!loading && todos.length > 0 && (
                     <div className="stats">

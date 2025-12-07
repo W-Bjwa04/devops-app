@@ -34,3 +34,8 @@ export async function getTodosCollection() {
     const db = await getDatabase();
     return db.collection('todos');
 }
+
+export async function getUsersCollection() {
+    const db = await getDatabase();
+    return db.collection('users');
+}

@@ -21,6 +21,26 @@ export async function GET() {
     }
 }
 
+// DELETE all todos
+export async function DELETE() {
+    try {
+        const collection = await getTodosCollection();
+        const result = await collection.deleteMany({});
+
+        return NextResponse.json({
+            success: true,
+            message: `Deleted ${result.deletedCount} todos`,
+            deletedCount: result.deletedCount
+        });
+    } catch (error) {
+        console.error('Error deleting all todos:', error);
+        return NextResponse.json(
+            { success: false, error: 'Failed to delete all todos' },
+            { status: 500 }
+        );
+    }
+}
+
 // POST create new todo
 export async function POST(request) {
     try {
