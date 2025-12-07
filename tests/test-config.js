@@ -46,8 +46,8 @@ function getChromeOptions() {
 async function createDriver() {
     const options = getChromeOptions();
     
-    // Set Chrome binary location if needed
-    options.setChromeBinaryPath('/usr/bin/google-chrome-stable');
+    // Set Chromium binary location
+    options.setChromeBinaryPath('/usr/bin/chromium');
     
     // Add remote debugging for better stability
     options.addArguments('--remote-debugging-port=9222');
