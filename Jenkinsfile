@@ -86,8 +86,9 @@ pipeline {
                 script {
                     try {
                         // Get the actual network name created by docker-compose
+                        // Use grep to match the exact network pattern for this workspace
                         def networkName = sh(
-                            script: 'docker network ls --filter "name=todo-network" --format "{{.Name}}" | head -n 1',
+                            script: 'docker network ls --format "{{.Name}}" | grep "devops-todo-pipeline_todo-network" | head -n 1',
                             returnStdout: true
                         ).trim()
                         
