@@ -87,7 +87,7 @@ pipeline {
                     try {
                         // Get the actual network name created by docker-compose
                         def networkName = sh(
-                            script: 'docker network ls --filter "name=todo-network" --format "{{.Name}}"',
+                            script: 'docker network ls --filter "name=todo-network" --format "{{.Name}}" | head -n 1',
                             returnStdout: true
                         ).trim()
                         
