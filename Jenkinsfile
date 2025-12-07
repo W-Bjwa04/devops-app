@@ -39,14 +39,14 @@ pipeline {
                     // Stop any existing containers
                     sh 'docker-compose down || true'
                     
-                    // Start MongoDB and Application
-                    sh 'docker-compose up -d mongodb app'
+                    // Start Application only (MongoDB runs on host)
+                    sh 'docker-compose up -d app'
                     
-                    // Wait for services to be healthy
-                    echo 'Waiting for services to be ready...'
-                    sh 'sleep 30'
+                    // Wait for service to be healthy
+                    echo 'Waiting for application to be ready...'
+                    sh 'sleep 15'
                     
-                    // Check if services are running
+                    // Check if service is running
                     sh 'docker-compose ps'
                 }
                 echo 'Application deployed successfully'

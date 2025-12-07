@@ -29,13 +29,12 @@ services:
     restart: unless-stopped
     environment:
       - NODE_ENV=production
-      - MONGODB_URI=mongodb://mongodb:27017/todoapp
+      - MONGODB_URI=mongodb://host.docker.internal:27017/todoapp
       - PORT=3000
     ports:
       - "3000:3000"
-    depends_on:
-      mongodb:
-        condition: service_healthy
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - todo-network
     healthcheck:
@@ -54,8 +53,7 @@ services:
       - HEADLESS=true
       - APP_URL=http://app:3000
     depends_on:
-      app:
-        condition: service_healthy
+      - app
     networks:
       - todo-network
     profiles:
