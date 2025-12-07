@@ -27,10 +27,12 @@ function getChromeOptions() {
     options.addArguments('--allow-insecure-localhost');
     options.addArguments('--disable-web-security');
     options.addArguments('--allow-running-insecure-content');
+    options.addArguments('--unsafely-treat-insecure-origin-as-secure=http://app:3000');
     
     // Disable features that might interfere
-    options.addArguments('--disable-features=VizDisplayCompositor');
+    options.addArguments('--disable-features=VizDisplayCompositor,IsolateOrigins,site-per-process');
     options.addArguments('--disable-blink-features=AutomationControlled');
+    options.addArguments('--disable-site-isolation-trials');
     
     // Set preferences to avoid SSL issues
     options.setUserPreferences({
@@ -43,6 +45,12 @@ function getChromeOptions() {
 
 async function createDriver() {
     const options = getChromeOptions();
+    
+    // Set Chrome binary location if needed
+    options.setChromeBinaryPath('/usr/bin/google-chrome-stable');
+    
+    // Add remote debugging for better stability
+    options.addArguments('--remote-debugging-port=9222');
 
     const driver = await new Builder()
         .forBrowser('chrome')
@@ -50,6 +58,9 @@ async function createDriver() {
         .build();
 
     await driver.manage().setTimeouts({ implicit: 10000 });
+    
+    // Set page load strategy
+    await driver.manage().setTimeouts({ pageLoad: 30000 });
 
     return driver;
 }
