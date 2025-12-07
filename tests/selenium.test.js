@@ -70,8 +70,10 @@ describe('DevOps Todo Application - Selenium Tests', function () {
     describe('Test 4: Create New Todo', function () {
         it('should successfully create a new todo', async function () {
             await driver.get(APP_URL);
+            await driver.wait(until.elementLocated(By.id('new-todo-input')), 10000);
 
             const input = await driver.findElement(By.id('new-todo-input'));
+            await driver.wait(until.elementIsEnabled(input), 5000);
             const addButton = await driver.findElement(By.id('add-todo-btn'));
 
             const todoText = `Test Todo ${Date.now()}`;
