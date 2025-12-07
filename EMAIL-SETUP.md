@@ -2,11 +2,51 @@
 
 ## ⚠️ IMPORTANT: Jenkins SMTP Configuration Required
 
-Your pipeline is ready to send emails to **waleedshahid123ml@gmail.com**, but Jenkins needs SMTP configuration first.
+Your pipeline is ready to send emails to the **commit author's email**, but Jenkins needs **EXTENDED E-mail Notification** configuration (not just regular E-mail Notification).
 
-## Step-by-Step Setup:
+## Critical: You Must Configure BOTH Sections!
 
-### 1. Configure Gmail App Password
+### Section 1: Extended E-mail Notification (REQUIRED)
+
+This is what your pipeline uses for sending emails.
+
+1. Open Jenkins: **Manage Jenkins** → **Configure System**
+2. Scroll to **"Extended E-mail Notification"** (NOT "E-mail Notification")
+3. Configure these exact settings:
+   ```
+   SMTP server: smtp.gmail.com
+   SMTP Port: 465
+   ```
+4. Click **"Advanced"** button (next to SMTP server field)
+5. **CRITICAL STEP**: Check the box **"Use SSL"**
+6. Click **"Add"** next to Credentials → Select **"Jenkins"**
+7. Fill credential form:
+   - Kind: **Username with password**
+   - Scope: Global
+   - Username: `your-email@gmail.com`
+   - Password: [Your 16-character Gmail App Password]
+   - ID: `gmail-smtp`
+   - Description: Gmail SMTP for Jenkins
+   - Click **"Add"**
+8. Now select the credential you just created from dropdown
+9. Default Content Type: `text/html`
+10. Default Recipients: (leave empty - pipeline will set this)
+11. Click **"Apply"**
+
+### Section 2: E-mail Notification (OPTIONAL - for build notifications)
+
+Scroll down to **"E-mail Notification"**:
+```
+SMTP server: smtp.gmail.com
+Click "Advanced":
+  ✅ Use SMTP Authentication
+  User Name: your-email@gmail.com
+  Password: [Your app password]
+  ✅ Use SSL
+  SMTP Port: 465
+```
+
+## How to Get Gmail App Password
 
 1. Go to your Google Account: https://myaccount.google.com/
 2. Click **Security** → **2-Step Verification** (enable if not already)
@@ -29,7 +69,7 @@ Your pipeline is ready to send emails to **waleedshahid123ml@gmail.com**, but Je
    - ✅ Check "Use SSL"
    - Click **Add** → **Jenkins** (Credentials)
    - Kind: Username with password
-   - Username: `waleedshahid123ml@gmail.com`
+   - Username: `your-email@gmail.com`
    - Password: [Paste your 16-character app password]
    - ID: `gmail-smtp`
    - Click **Add**
