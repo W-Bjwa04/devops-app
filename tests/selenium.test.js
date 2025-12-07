@@ -127,9 +127,11 @@ describe('DevOps Todo Application - Selenium Tests', function () {
     describe('Test 6: Toggle Todo Completion', function () {
         it('should toggle todo completion status', async function () {
             await driver.get(APP_URL);
+            await driver.wait(until.elementLocated(By.id('new-todo-input')), 10000);
 
             // Create a new todo
             const input = await driver.findElement(By.id('new-todo-input'));
+            await driver.wait(until.elementIsEnabled(input), 5000);
             const addButton = await driver.findElement(By.id('add-todo-btn'));
 
             const todoText = `Toggle Test ${Date.now()}`;
@@ -158,9 +160,11 @@ describe('DevOps Todo Application - Selenium Tests', function () {
     describe('Test 7: Edit Todo', function () {
         it('should edit an existing todo', async function () {
             await driver.get(APP_URL);
+            await driver.wait(until.elementLocated(By.id('new-todo-input')), 10000);
 
             // Create a new todo
             const input = await driver.findElement(By.id('new-todo-input'));
+            await driver.wait(until.elementIsEnabled(input), 5000);
             const addButton = await driver.findElement(By.id('add-todo-btn'));
 
             const originalText = `Edit Test ${Date.now()}`;
@@ -279,16 +283,19 @@ describe('DevOps Todo Application - Selenium Tests', function () {
     describe('Test 10: Statistics Display', function () {
         it('should display correct todo statistics', async function () {
             await driver.get(APP_URL);
+            await driver.wait(until.elementLocated(By.id('new-todo-input')), 10000);
 
             // Create a few todos
             const input = await driver.findElement(By.id('new-todo-input'));
+            await driver.wait(until.elementIsEnabled(input), 5000);
             const addButton = await driver.findElement(By.id('add-todo-btn'));
 
             const timestamp = Date.now();
             await input.sendKeys(`Stats Test 1 ${timestamp}`);
             await addButton.click();
-            await driver.sleep(500);
+            await driver.sleep(800);
 
+            await driver.wait(until.elementIsEnabled(input), 5000);
             await input.clear();
             await input.sendKeys(`Stats Test 2 ${timestamp}`);
             await addButton.click();
