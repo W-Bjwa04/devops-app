@@ -13,6 +13,22 @@ pipeline {
             steps {
                 echo 'Checking out code from GitHub...'
                 checkout scm
+                script {
+                    // Get commit author email
+                    env.AUTHOR_EMAIL = sh(
+                        script: 'git log -1 --pretty=format:%ae',
+                        returnStdout: true
+                    ).trim()
+                    env.AUTHOR_NAME = sh(
+                        script: 'git log -1 --pretty=format:%an',
+                        returnStdout: true
+                    ).trim()
+                    env.COMMIT_MSG = sh(
+                        script: 'git log -1 --pretty=format:%s',
+                        returnStdout: true
+                    ).trim()
+                    echo "Commit Author: ${env.AUTHOR_NAME} <${env.AUTHOR_EMAIL}>"
+                }
                 echo "Building from branch: ${env.GIT_BRANCH}"
                 echo "Commit: ${env.GIT_COMMIT}"
             }
@@ -96,8 +112,8 @@ pipeline {
                     <p><strong>Build Number:</strong> ${env.BUILD_NUMBER}</p>
                     <p><strong>Branch:</strong> ${env.GIT_BRANCH}</p>
                     <p><strong>Commit:</strong> ${env.GIT_COMMIT}</p>
-                    <p><strong>Commit Author:</strong> ${env.GIT_AUTHOR_NAME}</p>
-                    <p><strong>Commit Message:</strong> ${env.GIT_COMMIT_MSG}</p>
+                    <p><strong>Commit Author:</strong> ${env.AUTHOR_NAME}</p>
+                    <p><strong>Commit Message:</strong> ${env.COMMIT_MSG}</p>
                     
                     <h3>Test Results</h3>
                     <p style="color: green;">All Selenium tests passed successfully!</p>
@@ -112,7 +128,7 @@ pipeline {
                     <hr>
                     <p><em>DevOps Assignment-3 - Automated CI/CD Pipeline</em></p>
                 """,
-                to: "${env.GIT_AUTHOR_EMAIL}",
+                to: "${env.AUTHOR_EMAIL}",
                 mimeType: 'text/html',
                 attachLog: true
             )
@@ -128,8 +144,8 @@ pipeline {
                     <p><strong>Build Number:</strong> ${env.BUILD_NUMBER}</p>
                     <p><strong>Branch:</strong> ${env.GIT_BRANCH}</p>
                     <p><strong>Commit:</strong> ${env.GIT_COMMIT}</p>
-                    <p><strong>Commit Author:</strong> ${env.GIT_AUTHOR_NAME}</p>
-                    <p><strong>Commit Message:</strong> ${env.GIT_COMMIT_MSG}</p>
+                    <p><strong>Commit Author:</strong> ${env.AUTHOR_NAME}</p>
+                    <p><strong>Commit Message:</strong> ${env.COMMIT_MSG}</p>
                     
                     <h3>Failure Details</h3>
                     <p style="color: red;">The pipeline encountered an error during execution.</p>
@@ -141,7 +157,7 @@ pipeline {
                     <hr>
                     <p><em>DevOps Assignment-3 - Automated CI/CD Pipeline</em></p>
                 """,
-                to: "${env.GIT_AUTHOR_EMAIL}",
+                to: "${env.AUTHOR_EMAIL}",
                 mimeType: 'text/html',
                 attachLog: true
             )
@@ -157,8 +173,8 @@ pipeline {
                     <p><strong>Build Number:</strong> ${env.BUILD_NUMBER}</p>
                     <p><strong>Branch:</strong> ${env.GIT_BRANCH}</p>
                     <p><strong>Commit:</strong> ${env.GIT_COMMIT}</p>
-                    <p><strong>Commit Author:</strong> ${env.GIT_AUTHOR_NAME}</p>
-                    <p><strong>Commit Message:</strong> ${env.GIT_COMMIT_MSG}</p>
+                    <p><strong>Commit Author:</strong> ${env.AUTHOR_NAME}</p>
+                    <p><strong>Commit Message:</strong> ${env.COMMIT_MSG}</p>
                     
                     <h3>Test Results</h3>
                     <p style="color: orange;">Some Selenium tests failed!</p>
@@ -170,7 +186,7 @@ pipeline {
                     <hr>
                     <p><em>DevOps Assignment-3 - Automated CI/CD Pipeline</em></p>
                 """,
-                to: "${env.GIT_AUTHOR_EMAIL}",
+                to: "${env.AUTHOR_EMAIL}",
                 mimeType: 'text/html',
                 attachLog: true
             )
