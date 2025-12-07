@@ -1,7 +1,7 @@
 {
-  "name": "devops-todo-app",
+  "name": "todoist",
   "version": "1.0.0",
-  "description": "Next.js Todo Application with MongoDB for DevOps Assignment-3",
+  "description": "Professional task management application with Next.js and MongoDB",
   "private": true,
   "scripts": {
     "dev": "next dev",

@@ -188,8 +188,8 @@ export default function Home() {
     return (
         <div className="container">
             <header className="app-header">
-                <h1 className="app-title">📝 DevOps Todo App</h1>
-                <p className="app-subtitle">Next.js + MongoDB + Docker + Jenkins CI/CD</p>
+                <h1 className="app-title">✓ Todoist</h1>
+                <p className="app-subtitle">Organize your work and life, finally.</p>
             </header>
 
             <div className="todo-card">
@@ -200,7 +200,7 @@ export default function Home() {
                         <input
                             type="text"
                             className="todo-input"
-                            placeholder="What needs to be done?"
+                            placeholder="Add a task..."
                             value={newTodo}
                             onChange={(e) => setNewTodo(e.target.value)}
                             disabled={loading}
@@ -248,9 +248,9 @@ export default function Home() {
                     <div className="loading">Loading todos...</div>
                 ) : todos.length === 0 ? (
                     <div className="empty-state" id="empty-state">
-                        <div className="empty-icon">📭</div>
-                        <div className="empty-text">No todos yet</div>
-                        <div className="empty-subtext">Add your first todo to get started!</div>
+                        <div className="empty-icon">✓</div>
+                        <div className="empty-text">Your peace of mind is priceless</div>
+                        <div className="empty-subtext">Add your first task to get started</div>
                     </div>
                 ) : (
                     <ul className="todos-list" id="todos-list">

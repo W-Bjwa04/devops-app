@@ -62,8 +62,8 @@ export default function Signup() {
         <div className="auth-container">
             <div className="auth-card">
                 <div className="auth-header">
-                    <h1 className="auth-title">✨ Create Account</h1>
-                    <p className="auth-subtitle">Join DevOps Todo App today</p>
+                    <h1 className="auth-title">✓ Todoist</h1>
+                    <p className="auth-subtitle">Get organized. Start free today.</p>
                 </div>
 
                 {error && <div className="auth-error">{error}</div>}

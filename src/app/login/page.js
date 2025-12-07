@@ -50,8 +50,8 @@ export default function Login() {
         <div className="auth-container">
             <div className="auth-card">
                 <div className="auth-header">
-                    <h1 className="auth-title">🔐 Welcome Back</h1>
-                    <p className="auth-subtitle">Login to your DevOps Todo App</p>
+                    <h1 className="auth-title">✓ Todoist</h1>
+                    <p className="auth-subtitle">Welcome back. Log in to continue.</p>
                 </div>
 
                 {error && <div className="auth-error">{error}</div>}
