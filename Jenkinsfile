@@ -38,11 +38,22 @@ pipeline {
             steps {
                 echo 'Building Docker images...'
                 script {
-                    // Build application image (no cache to ensure fresh build)
-                    sh 'docker build --no-cache -t ${DOCKER_IMAGE}:latest -f Dockerfile .'
+                    // Clean up old images and build fresh (prevents cache issues)
+                    sh '''
+                        # Remove old images if they exist
+                        docker rmi -f ${DOCKER_IMAGE}:latest || true
+                        docker rmi -f ${DOCKER_TEST_IMAGE}:latest || true
+                        
+                        # Prune dangling images and build cache
+                        docker image prune -f
+                        docker builder prune -f --filter "until=24h"
+                    '''
                     
-                    // Build test image
-                    sh 'docker build -t ${DOCKER_TEST_IMAGE}:latest -f Dockerfile.test .'
+                    // Build application image with no cache
+                    sh 'docker build --no-cache --pull -t ${DOCKER_IMAGE}:latest -f Dockerfile .'
+                    
+                    // Build test image with no cache
+                    sh 'docker build --no-cache --pull -t ${DOCKER_TEST_IMAGE}:latest -f Dockerfile.test .'
                 }
                 echo 'Docker images built successfully'
             }
