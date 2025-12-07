@@ -18,6 +18,9 @@ function getChromeOptions() {
     options.addArguments('--window-size=1920,1080');
     options.addArguments('--disable-extensions');
     options.addArguments('--disable-software-rasterizer');
+    options.addArguments('--ignore-certificate-errors');
+    options.addArguments('--allow-insecure-localhost');
+    options.addArguments('--disable-web-security');
 
     return options;
 }
