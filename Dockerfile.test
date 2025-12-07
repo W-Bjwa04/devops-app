@@ -27,9 +27,13 @@ RUN apt-get update && apt-get install -y \
     xdg-utils \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Chromium browser (more stable for testing)
+# Install Firefox ESR and geckodriver (compatible with HTTP testing)
 RUN apt-get update \
-    && apt-get install -y chromium chromium-driver \
+    && apt-get install -y firefox-esr wget \
+    && wget -q https://github.com/mozilla/geckodriver/releases/download/v0.34.0/geckodriver-v0.34.0-linux64.tar.gz \
+    && tar -xzf geckodriver-v0.34.0-linux64.tar.gz -C /usr/local/bin/ \
+    && chmod +x /usr/local/bin/geckodriver \
+    && rm geckodriver-v0.34.0-linux64.tar.gz \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
