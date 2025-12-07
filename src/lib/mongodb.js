@@ -1,10 +1,7 @@
 import { MongoClient } from 'mongodb';
 
-if (!process.env.MONGODB_URI) {
-    throw new Error('Please add your MongoDB URI to .env file');
-}
-
-const uri = process.env.MONGODB_URI;
+// Allow build without MongoDB URI (will fail at runtime if not set)
+const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/todoapp';
 const options = {
     maxPoolSize: 10,
     minPoolSize: 5,
