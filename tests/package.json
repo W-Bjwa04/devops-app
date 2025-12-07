@@ -1,0 +1,23 @@
+{
+    "name": "devops-todo-selenium-tests",
+    "version": "1.0.0",
+    "description": "Selenium test suite for DevOps Todo App",
+    "main": "selenium.test.js",
+    "scripts": {
+        "test": "mocha selenium.test.js --timeout 30000 --exit",
+        "test:headless": "HEADLESS=true mocha selenium.test.js --timeout 30000 --exit"
+    },
+    "keywords": [
+        "selenium",
+        "testing",
+        "automation",
+        "devops"
+    ],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "selenium-webdriver": "^4.27.0",
+        "mocha": "^10.8.2",
+        "chai": "^4.5.0"
+    }
+}

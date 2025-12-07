@@ -1,0 +1,25 @@
+{
+  "name": "devops-todo-app",
+  "version": "1.0.0",
+  "description": "Next.js Todo Application with MongoDB for DevOps Assignment-3",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start -p 3000",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "14.2.18",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "mongodb": "^6.10.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.1",
+    "eslint-config-next": "14.2.18"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

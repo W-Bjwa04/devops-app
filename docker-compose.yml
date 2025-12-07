@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7.0
+    container_name: todo-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: todoapp
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - todo-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/todoapp --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Next.js Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: todo-app
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://mongodb:27017/todoapp
+      - PORT=3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - todo-network
+    healthcheck:
+      test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Selenium Tests (optional - run manually)
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    container_name: todo-tests
+    environment:
+      - HEADLESS=true
+      - APP_URL=http://app:3000
+    depends_on:
+      app:
+        condition: service_healthy
+    networks:
+      - todo-network
+    profiles:
+      - test
+
+volumes:
+  mongodb_data:
+    driver: local
+
+networks:
+  todo-network:
+    driver: bridge
