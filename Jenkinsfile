@@ -58,14 +58,22 @@ pipeline {
                 echo 'Running Selenium test suite...'
                 script {
                     try {
+                        // Get the actual network name created by docker-compose
+                        def networkName = sh(
+                            script: 'docker network ls --filter "name=todo-network" --format "{{.Name}}"',
+                            returnStdout: true
+                        ).trim()
+                        
+                        echo "Using Docker network: ${networkName}"
+                        
                         // Run tests in container
-                        sh '''
+                        sh """
                             docker run --rm \
-                                --network devops-assigment-3_todo-network \
+                                --network ${networkName} \
                                 -e APP_URL=http://app:3000 \
                                 -e HEADLESS=true \
                                 ${DOCKER_TEST_IMAGE}:latest
-                        '''
+                        """
                         echo 'All tests passed successfully! ✓'
                     } catch (Exception e) {
                         echo 'Some tests failed! ✗'
