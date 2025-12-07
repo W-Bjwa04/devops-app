@@ -1,51 +1,88 @@
 # Email Notification Setup
 
-## Quick Fix: Update Your Email Address
+## ⚠️ IMPORTANT: Jenkins SMTP Configuration Required
 
-Open `Jenkinsfile` and change line 10:
+Your pipeline is ready to send emails to **waleedshahid123ml@gmail.com**, but Jenkins needs SMTP configuration first.
 
-```groovy
-RECIPIENTS = 'your-email@example.com'
-```
+## Step-by-Step Setup:
 
-Replace `your-email@example.com` with your actual email address.
+### 1. Configure Gmail App Password
 
-### For multiple recipients:
-```groovy
-RECIPIENTS = 'email1@example.com,email2@example.com,email3@example.com'
-```
+1. Go to your Google Account: https://myaccount.google.com/
+2. Click **Security** → **2-Step Verification** (enable if not already)
+3. Scroll down to **App passwords**
+4. Generate a new app password:
+   - App: Mail
+   - Device: Other (Jenkins)
+5. **Copy the 16-character password** (e.g., `abcd efgh ijkl mnop`)
 
-## Jenkins Email Configuration
+### 2. Configure Jenkins Email Extension
 
-Make sure Jenkins Email Extension Plugin is configured:
-
-1. Go to Jenkins → Manage Jenkins → Configure System
-2. Find "Extended E-mail Notification" section
+1. Open Jenkins: **Manage Jenkins** → **Configure System**
+2. Scroll to **Extended E-mail Notification**
 3. Configure:
-   - **SMTP server**: smtp.gmail.com (for Gmail)
-   - **SMTP Port**: 465 (SSL) or 587 (TLS)
-   - **Credentials**: Add your email credentials
-   - **Default user e-mail suffix**: @gmail.com (optional)
+   ```
+   SMTP server: smtp.gmail.com
+   SMTP Port: 465
+   ```
+4. Click **Advanced**:
+   - ✅ Check "Use SSL"
+   - Click **Add** → **Jenkins** (Credentials)
+   - Kind: Username with password
+   - Username: `waleedshahid123ml@gmail.com`
+   - Password: [Paste your 16-character app password]
+   - ID: `gmail-smtp`
+   - Click **Add**
+5. Select the credential you just created
+6. Default user e-mail suffix: `@gmail.com`
 
-### Gmail Setup:
-1. Enable 2-Factor Authentication in your Google account
-2. Generate an "App Password":
-   - Google Account → Security → 2-Step Verification → App passwords
-3. Use the generated password in Jenkins credentials
+### 3. Configure Default E-mail Notification (Optional)
 
-### Test Email:
-After configuration, use "Test Configuration" button to verify emails are working.
+Scroll to **E-mail Notification**:
+```
+SMTP server: smtp.gmail.com
+Advanced → Use SMTP Authentication:
+  User Name: waleedshahid123ml@gmail.com
+  Password: [Your app password]
+  Use SSL: ✅
+  SMTP Port: 465
+```
+
+### 4. Test Configuration
+
+1. Click **Test configuration by sending test e-mail**
+2. Test e-mail recipient: `waleedshahid123ml@gmail.com`
+3. Click **Test configuration**
+4. Check your inbox for test email
+
+### 5. Save and Trigger Build
+
+1. Click **Save** at bottom of page
+2. Go to your pipeline and click **Build Now**
+3. After build completes, check your email!
 
 ## Current Status
 
-✅ Email notifications configured for:
-- **Success**: All tests pass
-- **Failure**: Build or deployment fails
-- **Unstable**: Some tests fail
+✅ **Pipeline configured** to send to: `waleedshahid123ml@gmail.com`  
+✅ **Dynamic routing** works (collaborators will receive their emails)  
+❌ **SMTP not configured** - Follow steps above
 
-📧 Emails include:
-- Build status
-- Test results
-- Commit information
-- Build logs (attached)
-- Direct link to Jenkins build
+## Email Will Include:
+
+- ✅ **Success**: All 12 tests passed
+- ❌ **Failure**: Build or tests failed
+- ⚠️ **Unstable**: Some tests failed
+
+Each email contains:
+- Build status & number
+- Commit info & author
+- Test results summary
+- Direct Jenkins link
+- Full build logs attached
+
+## Troubleshooting
+
+**"Not sent to valid addresses"** → SMTP not configured (follow steps above)  
+**"Authentication failed"** → Wrong app password or username  
+**"Connection timeout"** → Check firewall/port 465 access  
+**"SSL error"** → Make sure "Use SSL" is checked

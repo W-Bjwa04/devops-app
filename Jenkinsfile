@@ -38,8 +38,8 @@ pipeline {
             steps {
                 echo 'Building Docker images...'
                 script {
-                    // Build application image
-                    sh 'docker build -t ${DOCKER_IMAGE}:latest -f Dockerfile .'
+                    // Build application image (no cache to ensure fresh build)
+                    sh 'docker build --no-cache -t ${DOCKER_IMAGE}:latest -f Dockerfile .'
                     
                     // Build test image
                     sh 'docker build -t ${DOCKER_TEST_IMAGE}:latest -f Dockerfile.test .'
