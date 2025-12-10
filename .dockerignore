@@ -9,7 +9,7 @@ yarn-error.log*
 out
 build
 
-# Environment
+# Environment Varaible
 .env
 .env.local
 .env*.local
