@@ -85,10 +85,9 @@ pipeline {
                 echo 'Running Selenium test suite...'
                 script {
                     try {
-                        // Get the actual network name created by docker-compose
-                        // Use grep to match the exact network pattern for this workspace
+                        // Get the actual network name created by docker-compose (project name changes per workspace)
                         def networkName = sh(
-                            script: 'docker network ls --format "{{.Name}}" | grep "devops-auth-pipeline_auth-network" | head -n 1',
+                            script: 'docker network ls --format "{{.Name}}" | grep "auth-network" | head -n 1',
                             returnStdout: true
                         ).trim()
                         
