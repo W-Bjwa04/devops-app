@@ -1,4 +1,5 @@
 # Stage 1: Dependencies
+# Force rebuild: 2025-12-10-Auth-Update
 FROM node:18-alpine AS deps
 WORKDIR /app
 
