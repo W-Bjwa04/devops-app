@@ -1,7 +1,7 @@
 {
-    "name": "devops-todo-selenium-tests",
+    "name": "devops-auth-selenium-tests",
     "version": "1.0.0",
-    "description": "Selenium test suite for DevOps Todo App",
+    "description": "Selenium test suite for DevOps Auth App",
     "main": "selenium.test.js",
     "scripts": {
         "test": "mocha selenium.test.js --timeout 30000 --exit",

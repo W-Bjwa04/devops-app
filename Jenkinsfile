@@ -2,8 +2,8 @@ pipeline {
     agent any
     
     environment {
-        DOCKER_IMAGE = 'devops-todo-app'
-        DOCKER_TEST_IMAGE = 'devops-todo-tests'
+        DOCKER_IMAGE = 'devops-auth-app'
+        DOCKER_TEST_IMAGE = 'devops-auth-tests'
         APP_PORT = '3000'
         MONGODB_PORT = '27017'
     }
@@ -88,7 +88,7 @@ pipeline {
                         // Get the actual network name created by docker-compose
                         // Use grep to match the exact network pattern for this workspace
                         def networkName = sh(
-                            script: 'docker network ls --format "{{.Name}}" | grep "devops-todo-pipeline_todo-network" | head -n 1',
+                            script: 'docker network ls --format "{{.Name}}" | grep "devops-auth-pipeline_auth-network" | head -n 1',
                             returnStdout: true
                         ).trim()
                         

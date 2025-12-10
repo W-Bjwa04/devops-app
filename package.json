@@ -1,5 +1,5 @@
 {
-  "name": "todoist",
+  "name": "auth-system",
   "version": "1.0.0",
   "description": "Professional task management application with Next.js and MongoDB",
   "private": true,
