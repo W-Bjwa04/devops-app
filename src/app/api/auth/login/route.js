@@ -1,10 +1,5 @@
 import { NextResponse } from 'next/server';
-
-// Predefined user - ONLY this user can login
-const ALLOWED_USER = {
-    email: 'waleed@selenium.testing.org',
-    password: 'waleedSeleniumTesting'
-};
+import { getUsersCollection } from '@/lib/mongodb';
 
 export async function POST(request) {
     try {
@@ -18,19 +13,20 @@ export async function POST(request) {
             );
         }
 
-        // Check if user matches the predefined user
-        if (email === ALLOWED_USER.email && password === ALLOWED_USER.password) {
+        const usersCollection = await getUsersCollection();
+        const user = await usersCollection.findOne({ email: email.toLowerCase() });
+
+        if (user && user.password === password) {
             return NextResponse.json({
                 success: true,
-                user: { email: email },
+                user: { name: user.name, email: user.email },
                 message: 'Login successful'
             });
         }
 
-        // For all other users (including registered ones)
         return NextResponse.json(
-            { success: false, error: 'Sorry! You are not allowed to login. Site is in progress.' },
-            { status: 403 }
+            { success: false, error: 'Invalid email or password' },
+            { status: 401 }
         );
 
     } catch (error) {

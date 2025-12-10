@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { getUsersCollection } from '@/lib/mongodb';
 
 export async function POST(request) {
     try {
@@ -28,13 +29,31 @@ export async function POST(request) {
             );
         }
 
-        // Always return success for signup
-        // But users won't be able to login (except the predefined user)
-        // We're not storing these users anywhere - just simulating successful registration
+        const usersCollection = await getUsersCollection();
+        
+        // Check if user already exists
+        const existingUser = await usersCollection.findOne({ email: email.toLowerCase() });
+        if (existingUser) {
+            return NextResponse.json(
+                { success: false, error: 'User with this email already exists' },
+                { status: 409 }
+            );
+        }
+
+        // Create new user
+        const newUser = {
+            name: name.trim(),
+            email: email.toLowerCase(),
+            password: password, // In a real app, hash this!
+            createdAt: new Date()
+        };
+
+        await usersCollection.insertOne(newUser);
+
         return NextResponse.json(
             { 
                 success: true, 
-                user: { name: name.trim(), email: email.toLowerCase() },
+                user: { name: newUser.name, email: newUser.email },
                 message: 'Account created successfully! You can now login.'
             },
             { status: 201 }
