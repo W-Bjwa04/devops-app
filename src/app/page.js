@@ -1,20 +1,39 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import './globals.css';
 
 export default function Home() {
-    const [todos, setTodos] = useState([]);
+  const router = useRouter();
+  const [todos, setTodos] = useState([]);
     const [newTodo, setNewTodo] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [editingId, setEditingId] = useState(null);
     const [editText, setEditText] = useState('');
+    const [userEmail, setUserEmail] = useState('');
 
-    // Fetch todos on component mount
+    // Check authentication and fetch todos on component mount
     useEffect(() => {
+        // Check if user is logged in
+        const user = localStorage.getItem('user');
+        if (!user) {
+            router.push('/login');
+            return;
+        }
+        
+        try {
+            const userData = JSON.parse(user);
+            setUserEmail(userData.email || '');
+        } catch (e) {
+            console.error('Error parsing user data:', e);
+            router.push('/login');
+            return;
+        }
+        
         fetchTodos();
-    }, []);
+    }, [router]);
 
     const fetchTodos = async () => {
         try {
@@ -179,20 +198,31 @@ export default function Home() {
         }
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem('user');
+        router.push('/login');
+    };
+
     const stats = {
         total: todos.length,
         completed: todos.filter(t => t.completed).length,
         pending: todos.filter(t => !t.completed).length,
     };
 
-    return (
-        <div className="container">
-            <header className="app-header">
-                <h1 className="app-title">✓ Todoist</h1>
-                <p className="app-subtitle">Organize your work and life, finally.</p>
-            </header>
-
-            <div className="todo-card">
+  return (
+    <div className="container">
+      <header className="app-header">
+        <div className="header-content">
+          <div>
+            <h1 className="app-title">✓ Todoist</h1>
+            <p className="app-subtitle">Organize your work and life, finally.</p>
+          </div>
+          <div className="user-section">
+            <span className="user-email">{userEmail}</span>
+            <button onClick={handleLogout} className="logout-btn">Logout</button>
+          </div>
+        </div>
+      </header>            <div className="todo-card">
                 {error && <div className="error">{error}</div>}
 
                 <div className="top-actions">

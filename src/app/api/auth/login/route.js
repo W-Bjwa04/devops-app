@@ -1,6 +1,10 @@
-import { getUsersCollection } from '@/lib/mongodb';
 import { NextResponse } from 'next/server';
-import bcrypt from 'bcryptjs';
+
+// Predefined user - ONLY this user can login
+const ALLOWED_USER = {
+    email: 'waleed@selenium.testing.org',
+    password: 'waleedSeleniumTesting'
+};
 
 export async function POST(request) {
     try {
@@ -14,33 +18,21 @@ export async function POST(request) {
             );
         }
 
-        const collection = await getUsersCollection();
-        const user = await collection.findOne({ email: email.toLowerCase() });
-
-        if (!user) {
-            return NextResponse.json(
-                { success: false, error: 'Invalid email or password' },
-                { status: 401 }
-            );
+        // Check if user matches the predefined user
+        if (email === ALLOWED_USER.email && password === ALLOWED_USER.password) {
+            return NextResponse.json({
+                success: true,
+                user: { email: email },
+                message: 'Login successful'
+            });
         }
 
-        const isValidPassword = await bcrypt.compare(password, user.password);
+        // For all other users (including registered ones)
+        return NextResponse.json(
+            { success: false, error: 'Sorry! You are not allowed to login. Site is in progress.' },
+            { status: 403 }
+        );
 
-        if (!isValidPassword) {
-            return NextResponse.json(
-                { success: false, error: 'Invalid email or password' },
-                { status: 401 }
-            );
-        }
-
-        // Don't send password to client
-        const { password: _, ...userWithoutPassword } = user;
-
-        return NextResponse.json({
-            success: true,
-            user: userWithoutPassword,
-            message: 'Login successful'
-        });
     } catch (error) {
         console.error('Login error:', error);
         return NextResponse.json(

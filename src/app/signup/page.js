@@ -45,8 +45,9 @@ export default function Signup() {
             const data = await response.json();
 
             if (data.success) {
-                localStorage.setItem('user', JSON.stringify(data.user));
-                router.push('/');
+                // Show success message and redirect to login
+                alert('Account created successfully! Please login to continue.');
+                router.push('/login');
             } else {
                 setError(data.error || 'Signup failed');
             }

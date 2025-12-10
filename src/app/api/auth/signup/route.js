@@ -1,6 +1,4 @@
-import { getUsersCollection } from '@/lib/mongodb';
 import { NextResponse } from 'next/server';
-import bcrypt from 'bcryptjs';
 
 export async function POST(request) {
     try {
@@ -21,40 +19,23 @@ export async function POST(request) {
             );
         }
 
-        const collection = await getUsersCollection();
-        
-        // Check if user already exists
-        const existingUser = await collection.findOne({ email: email.toLowerCase() });
-        
-        if (existingUser) {
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
             return NextResponse.json(
-                { success: false, error: 'User already exists with this email' },
-                { status: 409 }
+                { success: false, error: 'Invalid email format' },
+                { status: 400 }
             );
         }
 
-        // Hash password
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Create new user
-        const newUser = {
-            name: name.trim(),
-            email: email.toLowerCase(),
-            password: hashedPassword,
-            createdAt: new Date(),
-        };
-
-        const result = await collection.insertOne(newUser);
-        const insertedUser = await collection.findOne({ _id: result.insertedId });
-
-        // Don't send password to client
-        const { password: _, ...userWithoutPassword } = insertedUser;
-
+        // Always return success for signup
+        // But users won't be able to login (except the predefined user)
+        // We're not storing these users anywhere - just simulating successful registration
         return NextResponse.json(
             { 
                 success: true, 
-                user: userWithoutPassword,
-                message: 'Account created successfully'
+                user: { name: name.trim(), email: email.toLowerCase() },
+                message: 'Account created successfully! You can now login.'
             },
             { status: 201 }
         );
