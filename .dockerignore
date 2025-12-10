@@ -28,7 +28,7 @@ Thumbs.db
 *.swp
 *.swo
 
-# Git
+# Git Ignore
 .git
 .gitignore
 
