@@ -13,6 +13,7 @@ export default function Home() {
     const [editingId, setEditingId] = useState(null);
     const [editText, setEditText] = useState('');
     const [userEmail, setUserEmail] = useState('');
+    const [isAuthChecking, setIsAuthChecking] = useState(true);
 
     // Check authentication and fetch todos on component mount
     useEffect(() => {
@@ -26,6 +27,7 @@ export default function Home() {
         try {
             const userData = JSON.parse(user);
             setUserEmail(userData.email || '');
+            setIsAuthChecking(false);
         } catch (e) {
             console.error('Error parsing user data:', e);
             router.push('/login');
@@ -208,6 +210,14 @@ export default function Home() {
         completed: todos.filter(t => t.completed).length,
         pending: todos.filter(t => !t.completed).length,
     };
+
+    if (isAuthChecking) {
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <div className="text-xl">Loading...</div>
+            </div>
+        );
+    }
 
   return (
     <div className="container">
