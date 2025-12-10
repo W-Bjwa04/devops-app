@@ -38,18 +38,27 @@ pipeline {
             steps {
                 echo 'Building Docker images...'
                 script {
-                    // Clean up old images and build fresh (prevents cache issues)
+                    // AGGRESSIVE cleanup to prevent ANY caching issues
                     sh '''
-                        # Remove old images if they exist
+                        # Stop and remove ALL containers using our images
+                        docker ps -a --filter "name=auth-" -q | xargs -r docker rm -f || true
+                        docker ps -a --filter "name=todo-" -q | xargs -r docker rm -f || true
+                        
+                        # Remove ALL old images (both auth and todo variants)
                         docker rmi -f ${DOCKER_IMAGE}:latest || true
                         docker rmi -f ${DOCKER_TEST_IMAGE}:latest || true
+                        docker rmi -f devops-todo-app:latest || true
+                        docker rmi -f devops-todo-tests:latest || true
+                        docker rmi -f devops-todo-pipeline-app:latest || true
+                        docker rmi -f devops-todo-pipeline_app:latest || true
                         
-                        # Prune dangling images and build cache
-                        docker image prune -f
-                        docker builder prune -f --filter "until=24h"
+                        # Remove ALL build cache and dangling images
+                        docker builder prune -af
+                        docker image prune -af
+                        docker system prune -f
                     '''
                     
-                    // Build application image with no cache
+                    // Build application image with no cache and fresh base
                     sh 'docker build --no-cache --pull -t ${DOCKER_IMAGE}:latest -f Dockerfile .'
                     
                     // Build test image with no cache
